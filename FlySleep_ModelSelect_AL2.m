@@ -17,7 +17,7 @@ disp(' ')
 inputarray=data(:,1);
 inputarray(isnan(inputarray) | inputarray<=0)=[];  %remove NaN, 0 and neg values
 
-distributdata = findandcut(inputarray,1);  %%%this function takes out events that occur only once
+distributdata = findandcut(inputarray,0);  %%%this function takes out events that occur only once
 % anlbouts=inputarray;
 minval=min(distributdata);
 maxval=max(distributdata);

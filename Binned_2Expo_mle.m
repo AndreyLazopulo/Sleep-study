@@ -15,7 +15,7 @@ plambda=[]; lnpx=[]; AIC=[]; gof=[]; pval=[];  %initialize
 U=unique(distributdata);
 interval=U(2)-U(1);
 
-xmin=min(distributdata); xmax=Inf; % xmax=max(log(distributdata));
+xmin=min(distributdata); xmax=max(distributdata);
 % distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 switch binway
     case 1
@@ -130,8 +130,12 @@ end
         
         a1=A(1); lam1=exp(A(2)); lam2=exp(A(3));
         %calculate expo term
-        expo_term1=a1*exp(lam1*xmin)*(exp(-lam1*lb)-exp(-lam1*ub));
-        expo_term2=(1-a1)*exp(lam2*xmin)*(exp(-lam2*lb)-exp(-lam2*ub));
+        % without xmax
+%         expo_term1=a1*(exp(-lam1*lb)-exp(-lam1*ub))*exp(lam1*xmin);
+%         expo_term2=(1-a1)*(exp(-lam2*lb)-exp(-lam2*ub))*exp(lam2*xmin);
+        %with xmax
+        expo_term1=a1*(exp(-lam1*lb)-exp(-lam1*ub))./(exp(-lam1*xmin)-exp(-lam1*xmax));
+        expo_term2=(1-a1)*(exp(-lam2*lb)-exp(-lam2*ub))./(exp(-lam2*xmin)-exp(-lam2*xmax));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         expo_term2 = reshape(expo_term2, 1, numel(expo_term2));
         PrVals=((expo_term2)+(expo_term1));

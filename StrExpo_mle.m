@@ -9,11 +9,11 @@ end
 Numtrials=10;% (nargin>3)*Nt+(nargin<=3)*10;
 plambda=[]; lnpx=[]; AIC=[]; gof=[]; pval=[];  %initialize
 
-xmin=min(distributdata); xmax=Inf;% xmax=max(log(distributdata));
-% distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
-
 U=unique(distributdata);
 interval=U(2)-U(1);
+
+xmin=min(distributdata); xmax=max(distributdata)+interval;
+% distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 
 %%set variables
 k=1; %%order of exponential
@@ -34,7 +34,7 @@ u=edges(2:end);
 g=@(a,a1,l1,x) a1*exp(-l1*(exp(x)).^a).*exp(x);
 
 miny=0.001; minlambda=1./1500;
-maxy=1; maxlambda=1./1;
+maxy=1; maxlambda=10;
 
 % miny=-2; minlambda=0.99/max(x);
 % maxy=0; maxlambda=0.99/min(x);
@@ -85,7 +85,7 @@ gof=[]; pval=[];
 % figure; plot(h,sum(h)*exp(Prfunc(oparm(1,:),l,u)),'o',h,h);
 if plotting == 1
     fprintf('alpha-parameter : %5.4f \n',plambda(1))
-    fprintf('a-parameters : %5.4f \n',plambda(2:k+1))
+%     fprintf('a-parameters : %5.4f \n',plambda(2:k+1))
     fprintf('lambda-parameters : %5.4f \n',plambda(k+2:end))
     fprintf('totLL = %10.3f \n',totLL)
     fprintf('AIC = %10.3f \n',AIC)
@@ -113,7 +113,10 @@ end
 
         alpha=A(1); b=exp(A(2)); a1=1;
         %calculate expo term
-        stexpo_term=log(a1)+log(gamma_incomplete(b*l.^alpha,1/alpha)-gamma_incomplete(b*u.^alpha,1/alpha))-log(gamma_incomplete(b*xmin^alpha,1/alpha));
+        %without xmax
+%         stexpo_term=log(a1)+log(gamma_incomplete(b*l.^alpha,1/alpha)-gamma_incomplete(b*u.^alpha,1/alpha))-log(gamma_incomplete(b*xmin^alpha,1/alpha));
+        %with xmax
+        stexpo_term=log(a1)+log(gamma_incomplete(b*l.^alpha,1/alpha)-gamma_incomplete(b*u.^alpha,1/alpha))-log(gamma_incomplete(b*xmin^alpha,1/alpha)-gamma_incomplete(b*xmax^alpha,1/alpha));
         stexpo_term = reshape(stexpo_term, 1, numel(stexpo_term));
         Pr=stexpo_term;
         fvals=-sum(h.*Pr);
@@ -122,7 +125,10 @@ end
         
         alpha=A(1); b=exp(A(2)); a1=1;
         %calculate expo term
-        stexpo_term=log(a1)+log(gamma_incomplete(b*lb.^alpha,1/alpha)-gamma_incomplete(b*ub.^alpha,1/alpha))-log(gamma_incomplete(b*xmin^alpha,1/alpha));
+        %without xmax
+%         stexpo_term=log(a1)+log(gamma_incomplete(b*lb.^alpha,1/alpha)-gamma_incomplete(b*ub.^alpha,1/alpha))-log(gamma_incomplete(b*xmin^alpha,1/alpha));
+        %with xmax
+        stexpo_term=log(a1)+log(gamma_incomplete(b*lb.^alpha,1/alpha)-gamma_incomplete(b*ub.^alpha,1/alpha))-log(gamma_incomplete(b*xmin^alpha,1/alpha)-gamma_incomplete(b*xmax^alpha,1/alpha));
         stexpo_term = reshape(stexpo_term, 1, numel(stexpo_term));
         PrVals=stexpo_term;
     end

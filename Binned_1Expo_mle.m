@@ -12,7 +12,7 @@ end
 Numtrials=10;% (nargin>3)*Nt+(nargin<=3)*10;
 plambda=[]; lnpx=[]; AIC=[]; gof=[]; pval=[];  %initialize
 
-xmin=min(distributdata); xmax=Inf; % xmax=max(log(distributdata));
+xmin=min(distributdata); xmax=max(distributdata);
 % distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 
 U=unique(distributdata);
@@ -86,7 +86,7 @@ AIC=-2*totLL+2*n_params*numel(distributdata)/(numel(distributdata)-n_params-1);
 
 gof=[]; pval=[];
 %%calculate quantities to carry out G-test
-[Obs Expect] = GetObsExpect_AL(distributdata,'Expo_bound',plambda,1);
+[Obs Expect] = GetObsExpect_AL(distributdata,'Expo_bound',1/plambda,1);
 [gof pval] = Gtest(Obs,Expect,n_params); %do the G-test
 
 if plotting == 1
@@ -123,7 +123,8 @@ end
         
         a1=1; lam1=exp(A(1));
         %calculate expo term
-        expo_term1=log(a1)+lam1*xmin+log(exp(-lam1*lb)-exp(-lam1*ub));
+%         expo_term1=log(a1)+lam1*xmin+log(exp(-lam1*lb)-exp(-lam1*ub));
+        expo_term1=log(a1)+log(exp(-lam1*lb)-exp(-lam1*ub))-log(exp(-lam1*xmin)-exp(-lam1*xmax));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         PrVals=exp(expo_term1);
     end

@@ -50,7 +50,7 @@ LL=-h.*log(Prfunc(parm,l,u));
 AIC=-2*totLL+2*n_params*numel(x)/(numel(x)-n_params-1);
 
 %%calculate quantities to carry out G-test
-[Obs Expect] = GetObsExpect_AL2(x,'Log-Norm',[mu,sigma],10);
+[Obs Expect] = GetObsExpect_AL(x,'Log-Norm',[mu,sigma],1);
 [gof pval] = Gtest(Obs,Expect,n_params); %do the G-test
 
 if plotting == 1
@@ -73,18 +73,20 @@ end
         m=A(1); sig=A(2);
         deno=sqrt(2)*sig;
         zmin=(m-log(xmin))/deno;
+        zmax=(m-log(xmax))/deno;
         zl=(m-log(l))./deno;
         zr=(m-log(u))./deno;
-        Pr=-log(1+erf(zmin))+log(erf(zl)-erf(zr));
+        Pr=-log(erf(zmin)-erf(zmax))+log(erf(zl)-erf(zr));
         yfunc=-sum(h.*Pr);
     end
     function PrVals=Prfunc(A,lb,ub)
         m=A(1); sig=A(2);
         deno=sqrt(2)*sig;
         zmin=(m-log(xmin))/deno;
+        zmax=(m-log(xmax))/deno;
         zl=(m-log(lb))./deno;
         zr=((m-log(ub))./deno);
-        Pr=-log(1+erf(zmin))+log(erf(zl)-erf(zr));
+        Pr=-log(erf(zmin)-erf(zmax))+log(erf(zl)-erf(zr));
         PrVals=exp(Pr);
     end
     

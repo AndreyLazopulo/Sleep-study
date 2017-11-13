@@ -62,6 +62,7 @@ if plotting == 1
     fprintf('betta parameter : %5.4f\n',bet)
     fprintf('lambda parameter : %5.4f\n',lamd)
     fprintf('totLL = %10.3f \n',totLL)
+    fprintf('totLL2 = %10.3f \n',logpdf([0.6,2.5,0.4]))
     fprintf('AIC = %10.3f \n',AIC)
     fprintf('pval = %5.4f \n',pval)
     figure; loglog((l+u)./2,h,'o')
@@ -78,24 +79,24 @@ end
     %% log pdf function
     function [mylogpdfvals]=logpdf(A)
         a=A(1); b=A(2); lam=A(3);
-        nn=(a+lam-1)/lam; 
-        zmin=double(vpa(expint(sym(nn),(xmin/b)^lam),25));
-        zmax=double(vpa(expint(sym(nn),(xmax/b)^lam),25));
+%         nn=(a+lam-1)/lam; 
+%         zmin=double(vpa(expint(sym(nn),(xmin/b)^lam),5));
+%         zmax=double(vpa(expint(sym(nn),(xmax/b)^lam),5));
 %         zl=
 %         zr=
-        Pr=a*log(xmin*xmax)+(1-a)*log(b)+log(gamma_incomplete((l./b).^lam,(1-a)/lam)-gamma_incomplete((u./b).^lam,(1-a)/lam))-log(xmin*(xmax^a)*zmin-xmax*(xmin^a)*zmax);
+        Pr=log(gamma_incomplete((l./b).^lam,(1-a)/lam)-gamma_incomplete((u./b).^lam,(1-a)/lam))-log(gamma_incomplete((xmin/b).^lam,(1-a)/lam)-gamma_incomplete((xmax/b).^lam,(1-a)/lam));
         mylogpdfvals=-sum(h.*Pr);
 %         exint=xmin^(1-a)*zmin-xmax^(1-a)*zmax;
 %         mylogpdfvals=-log(exint)-a*log(x)-(x./b).^lam+log(lam);
     end
     function [Prvals]=Prfunc(A,lb,ub)
         a=A(1); b=A(2); lam=A(3);
-        nn=(a+lam-1)/lam; 
-        zmin=double(vpa(expint(sym(nn),(xmin/b)^lam),25));
-        zmax=double(vpa(expint(sym(nn),(xmax/b)^lam),25));
+%         nn=(a+lam-1)/lam; 
+%         zmin=double(vpa(expint(sym(nn),(xmin/b)^lam),5));
+%         zmax=double(vpa(expint(sym(nn),(xmax/b)^lam),5));
 %         zl=double(vpa(expint(sym(nn),(lb/b).^lam),25));
 %         zr=double(vpa(expint(sym(nn),(ub/b).^lam),25));
-        Pr=a*log(xmin*xmax)+(1-a)*log(b)+log(gamma_incomplete((lb./b).^lam,(1-a)/lam)-gamma_incomplete((ub./b).^lam,(1-a)/lam))-log(xmin*(xmax^a)*zmin-xmax*(xmin^a)*zmax);
+        Pr=log(gamma_incomplete((lb./b).^lam,(1-a)/lam)-gamma_incomplete((ub./b).^lam,(1-a)/lam))-log(gamma_incomplete((xmin/b).^lam,(1-a)/lam)-gamma_incomplete((xmax/b).^lam,(1-a)/lam));
         Prvals=exp(Pr);
 %         exint=xmin^(1-a)*zmin-xmax^(1-a)*zmax;
 %         mylogpdfvals=-log(exint)-a*log(x)-(x./b).^lam+log(lam);

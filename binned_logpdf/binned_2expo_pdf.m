@@ -5,10 +5,15 @@ function fvals=binned_2expo_pdf(x,bin_bound,A)
         l=edges(1:end-1);
         u=edges(2:end);
         xmin=min(x);
+        xmax=max(x);
         a1=A(1); lam1=exp(A(2)); lam2=exp(A(3));
         %calculate expo term
-        expo_term1=a1*exp(lam1*xmin)*(exp(-lam1*l)-exp(-lam1*u));
-        expo_term2=(1-a1)*exp(lam2*xmin)*(exp(-lam2*l)-exp(-lam2*u));
+        %without xmax
+%         expo_term1=a1*exp(lam1*xmin)*(exp(-lam1*l)-exp(-lam1*u));
+%         expo_term2=(1-a1)*exp(lam2*xmin)*(exp(-lam2*l)-exp(-lam2*u));
+        %with xmax
+        expo_term1=a1*(exp(-lam1*l)-exp(-lam1*u))./(exp(-lam1*xmin)-exp(-lam1*xmax));
+        expo_term2=(1-a1)*(exp(-lam2*l)-exp(-lam2*u))./(exp(-lam2*xmin)-exp(-lam2*xmax));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         expo_term2 = reshape(expo_term2, 1, numel(expo_term2));
         Pr=log((expo_term2)+(expo_term1));

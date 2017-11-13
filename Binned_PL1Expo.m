@@ -12,7 +12,7 @@ end
 Numtrials=10;% (nargin>3)*Nt+(nargin<=3)*10;
 plambda=[]; lnpx=[]; AIC=[]; gof=[]; pval=[];  %initialize
 
-xmin=min(distributdata); xmax=Inf;% xmax=max(log(distributdata));
+xmin=min(distributdata); xmax=max(distributdata);
 % distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 
 U=unique(distributdata);
@@ -129,7 +129,10 @@ end
         
         alpha=A(1); a1=1; lam1=exp(A(2));
         %calculate expo term
-        expo_term1=log(a1)+log(gamma_incomplete(lam1*lb,1-alpha)-gamma_incomplete(lam1*ub,1-alpha))-log(gamma_incomplete(lam1*xmin,1-alpha));
+        %without xmax
+%         expo_term1=log(a1)+log(gamma_incomplete(lam1*lb,1-alpha)-gamma_incomplete(lam1*ub,1-alpha))-log(gamma_incomplete(lam1*xmin,1-alpha));
+        %with xmax
+        expo_term1=log(a1)+log(gamma_incomplete(lam1*lb,1-alpha)-gamma_incomplete(lam1*ub,1-alpha))-log(gamma_incomplete(lam1*xmin,1-alpha)-gamma_incomplete(lam1*xmax,1-alpha));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         PrVals=expo_term1;
     end

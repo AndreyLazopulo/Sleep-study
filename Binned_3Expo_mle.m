@@ -15,7 +15,7 @@ plambda=[]; lnpx=[]; AIC=[]; gof=[]; pval=[];  %initialize
 U=unique(distributdata);
 interval=U(2)-U(1);
 
-xmin=min(distributdata); xmax=Inf; % xmax=max(log(distributdata));
+xmin=min(distributdata); xmax=max(distributdata);
 % distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 
 %%set variables
@@ -142,9 +142,9 @@ end
         
         a1=A(1); a2=A(2); lam1=exp(A(3)); lam2=exp(A(4)); lam3=exp(A(5));
         %calculate expo term
-        expo_term1=a1*exp(lam1*xmin)*(exp(-lam1*lb)-exp(-lam1*ub));
-        expo_term2=a2*exp(lam2*xmin)*(exp(-lam2*lb)-exp(-lam2*ub));
-        expo_term3=(1-a1-a2)*exp(lam3*xmin)*(exp(-lam3*lb)-exp(-lam3*ub));
+        expo_term1=a1*(exp(-lam1*lb)-exp(-lam1*ub))./(exp(-lam1*xmin)-exp(-lam1*xmax));
+        expo_term2=a2*(exp(-lam2*lb)-exp(-lam2*ub))./(exp(-lam2*xmin)-exp(-lam2*xmax));
+        expo_term3=(1-a1-a2)*(exp(-lam3*lb)-exp(-lam3*ub))./(exp(-lam3*xmin)-exp(-lam3*xmax));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         expo_term2 = reshape(expo_term2, 1, numel(expo_term2));
         expo_term3 = reshape(expo_term3, 1, numel(expo_term3));

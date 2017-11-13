@@ -12,7 +12,7 @@ end
 Numtrials=10;% (nargin>3)*Nt+(nargin<=3)*10;
 plambda=[]; lnpx=[]; AIC=[]; gof=[]; pval=[];  %initialize
 
-xmin=min(distributdata); xmax=Inf; % xmax=max(log(distributdata));
+xmin=min(distributdata); xmax=max(distributdata);
 % distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 
 U=unique(distributdata);
@@ -145,10 +145,16 @@ end
         
         alpha=A(1); a1=A(2); a2=A(3); a3=A(4); b=exp(A(5)); lam1=exp(A(6)); lam2=exp(A(7)); lam3=exp(A(8));
         %calculate expo term
-        stexpo_term=a1*(gamma_incomplete(b*lb.^alpha,1/alpha)-gamma_incomplete(b*ub.^alpha,1/alpha))./(gamma_incomplete(b*xmin^alpha,1/alpha));
-        expo_term1=a2*exp(lam1*xmin)*(exp(-lam1*lb)-exp(-lam1*ub));
-        expo_term2=a3*exp(lam2*xmin)*(exp(-lam2*lb)-exp(-lam2*ub));
-        expo_term3=(1-a1-a2-a3)*exp(lam3*xmin)*(exp(-lam3*lb)-exp(-lam3*ub));
+        %without xmax
+%         stexpo_term=a1*(gamma_incomplete(b*lb.^alpha,1/alpha)-gamma_incomplete(b*ub.^alpha,1/alpha))./(gamma_incomplete(b*xmin^alpha,1/alpha));
+%         expo_term1=a2*exp(lam1*xmin)*(exp(-lam1*lb)-exp(-lam1*ub));
+%         expo_term2=a3*exp(lam2*xmin)*(exp(-lam2*lb)-exp(-lam2*ub));
+%         expo_term3=(1-a1-a2-a3)*exp(lam3*xmin)*(exp(-lam3*lb)-exp(-lam3*ub));
+        %with xmax
+        stexpo_term=a1*(gamma_incomplete(b*lb.^alpha,1/alpha)-gamma_incomplete(b*ub.^alpha,1/alpha))./(gamma_incomplete(b*xmin^alpha,1/alpha)-gamma_incomplete(b*xmax^alpha,1/alpha));
+        expo_term1=a2*(exp(-lam1*lb)-exp(-lam1*ub))./(exp(-lam1*xmin)-exp(-lam1*xmax));
+        expo_term2=a3*(exp(-lam2*lb)-exp(-lam2*ub))./(exp(-lam2*xmin)-exp(-lam2*xmax));
+        expo_term3=(1-a1-a2-a3)*(exp(-lam3*lb)-exp(-lam3*ub))./(exp(-lam3*xmin)-exp(-lam3*xmax));
         stexpo_term = reshape(stexpo_term, 1, numel(stexpo_term));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         expo_term2 = reshape(expo_term2, 1, numel(expo_term2));
