@@ -22,7 +22,7 @@ interval=U(2)-U(1);
 k=3; %%order of exponential
 switch binway
     case 1
-        bin_bound=[unique(distributdata);Inf];
+        bin_bound=[unique(distributdata);xmax+interval];
         l2=floor(min(distributdata)):interval:max(distributdata); u2=l2+interval;
     case 2
         bin_bound=floor(min(distributdata)):interval:max(distributdata)+interval; %[unique(distributdata);Inf];

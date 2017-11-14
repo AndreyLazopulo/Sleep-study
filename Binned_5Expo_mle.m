@@ -19,7 +19,7 @@ xmin=min(distributdata); xmax=max(distributdata);
 % distributdata(distributdata<xmin|distributdata>xmax)=[];   %exclude data that are outside bounds
 switch binway
     case 1
-        bin_bound=[unique(distributdata);Inf];
+        bin_bound=[unique(distributdata);xmax+interval];
         l2=floor(min(distributdata)):interval:max(distributdata); u2=l2+interval;
     case 2
         bin_bound=floor(min(distributdata)):1/3:max(distributdata)+1/3; %[unique(distributdata);Inf];
