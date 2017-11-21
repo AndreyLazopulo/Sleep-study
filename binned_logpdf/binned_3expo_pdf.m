@@ -15,7 +15,7 @@ function fvals=binned_3expo_pdf(x,bin_bound,A)
         %with xmax
         expo_term1=a1*(exp(-lam1*l)-exp(-lam1*u))./(exp(-lam1*xmin)-exp(-lam1*xmax));
         expo_term2=a2*(exp(-lam2*l)-exp(-lam2*u))./(exp(-lam2*xmin)-exp(-lam2*xmax));
-        expo_term3=(1-a1-a2)*(exp(-lam3*l)-exp(-lam3*u)./(exp(-lam3*xmin)-exp(-lam3*xmax)));
+        expo_term3=(1-a1-a2)*(exp(-lam3*l)-exp(-lam3*u))./(exp(-lam3*xmin)-exp(-lam3*xmax));
         expo_term1 = reshape(expo_term1, 1, numel(expo_term1));
         expo_term2 = reshape(expo_term2, 1, numel(expo_term2));
         expo_term3 = reshape(expo_term3, 1, numel(expo_term3));
