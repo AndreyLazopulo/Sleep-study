@@ -56,16 +56,16 @@ maxy=1; maxlambda=10;
 
 Allstartvals2=loghistfit4(distributdata,0.2,3,300,0,0,1);
 Allstartvals1=loghistfit4(distributdata,0.2,3,300,0,0,2);
-Allstartvals=[Allstartvals1(1:30,:);Allstartvals2(1:30,:)];
-startpoint=Allstartvals(sum(Allstartvals(:,1:k-1),2)<1,:);
+Allstartvals=[Allstartvals1(1:40,:);Allstartvals2(1:40,:)];
+startpoint=Allstartvals(sum(Allstartvals(:,1:k-1),2)<10,:);
 startpoint(:,k:end)=log(startpoint(:,k:end));
 % Allstartvals(:,2:k)=normrnd(0,1,60,k-1);
 
 specoption=optimset('Algorithm','interior-point','MaxIter',10000,'MaxFunEvals',10000,'TolX',10^-6,'TolFun',10^-8,'Display','off','FinDiffType','central');
 lowerbound=[miny miny log(minlambda) log(minlambda) log(minlambda)];
 upperbound=[maxy maxy log(maxlambda) log(maxlambda) log(maxlambda)];
-oparm=NaN(50,2*k-1); totLL=NaN(50,1);
-ggg=min([50,size(startpoint,1)]);
+oparm=NaN(70,2*k-1); totLL=NaN(70,1);
+ggg=min([70,size(startpoint,1)]);
 parfor gg=1:ggg
     
     try

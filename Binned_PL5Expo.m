@@ -1,4 +1,4 @@
-function [plambda AIC gof pval LL] = Binned_PL5Expo(distributdata,plotting,binway)
+function [plambda AIC gof pval LL c_hat] = Binned_PL5Expo(distributdata,plotting,binway)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -94,6 +94,7 @@ gof=[]; pval=[];
 [Obs Expect] = GetObsExpect_AL(distributdata,'PL5Exponential',plambda,1);
 [gof pval] = Gtest(Obs,Expect,n_params); %do the G-test
 % figure; plot(h,sum(h)*exp(Prfunc(oparm(1,:),l,u)),'o',h,h);
+c_hat=sum((Obs-Expect).^2./Expect)/(length(Obs)-n_params-1);
 
 if plotting == 1
     fprintf('alpha-parameter : %5.4f \n',plambda(1))

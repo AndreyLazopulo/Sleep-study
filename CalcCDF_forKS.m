@@ -52,6 +52,14 @@ switch model,
         cdfvals = myPLwithExpoCdf(xvals,params,xmin,xmax,5);
     case 'PL6Exponential'
         cdfvals = myPLwithExpoCdf(xvals,params,xmin,xmax,6);
+    case 'Gaus1Exponential'
+        cdfvals = myGausExpoCdf(xvals,params,xmin,xmax,2);
+    case 'Gaus2Exponential'
+        cdfvals = myGausExpoCdf(xvals,params,xmin,xmax,3);
+    case 'Gaus3Exponential'
+        cdfvals = myGausExpoCdf(xvals,params,xmin,xmax,4);
+    case 'Gaus4Exponential'
+        cdfvals = myGausExpoCdf(xvals,params,xmin,xmax,5);
     case 'StrExpo'
         cdfvals = myStrExpoCdf(xvals,params,xmin,xmax,1);
     case 'Str1Exponential'

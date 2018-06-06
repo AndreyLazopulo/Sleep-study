@@ -22,6 +22,12 @@ switch bintype
     case 2
         binbound=[0:0.2:10]';
 end
+%initial guess for alpha
+[Y,E]=histcounts(X,min(X):1/3:max(X)+1/3);
+f=fit(log(E(1:4)'),log(Y(1:4)'),'poly1');
+CC=coeffvalues(f);
+alpha0=-CC(1);
+
 [fitY,edges]=histcounts(log(X),binbound);
 fitY=fitY./length(X);
 fitX=(edges(1:end-1)+edges(2:end))/2;
@@ -51,9 +57,10 @@ fitY=fitY'./diff(edges);
 %     end
 % end
 %%Generate initial values for the parameters
-alpha0hat=1-N/(N*log(min(X))-sum(log(X)));
-alpha_Init=exprnd(alpha0hat/2,[NtMax,1]);  %%%random guesses for Alpha
-alpha_Init(alpha_Init>3)=3;  %%truncate if necessary
+% alpha0hat=1-N/(N*log(min(X))-sum(log(X)));
+% alpha_Init=exprnd(alpha0hat/2,[NtMax,1]);  %%%random guesses for Alpha
+% alpha_Init(alpha_Init>3)=3;  %%truncate if necessary
+alpha_Init=0.4*alpha0*rand(NtMax,1)+alpha0-0.2*alpha0;
 
 a_Init=normrnd(0,1,NtMax,n-1);  %%%random guesses for a's
 a_Init(a_Init<-1)=-1; %%%%truncate values
@@ -87,8 +94,8 @@ switch n
 end
 % astart=[5,-10,6,-8,4,-1];
 % lstart=[0.5,0.01,0.05,0.1,0.07,0.3];
-lb=[0,-1*ones(1,n-1),repmat(minlam,1,n)];
-ub=[3,ones(1,n-1),10*ones(1,n)];
+lb=[alpha0-0.2*alpha0,-1*ones(1,n-1),repmat(minlam,1,n)];
+ub=[alpha0-0.2*alpha0,ones(1,n-1),10*ones(1,n)];
 % start=[2,astart(1:n),lstart(1:n)];
 parms=zeros(NtMax,2*n);
 errors=zeros(NtMax,1);

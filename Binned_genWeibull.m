@@ -28,6 +28,7 @@ end
 [f,gof]=fit(edges(1:5),-log(h(1:5)'./length(distributdata)),'poly1');
 CC=coeffvalues(f);
 a0=CC(1);
+b0=CC(1)+CC(2);
 h = reshape(h, 1, numel(h));
 edges = reshape(edges, 1, numel(edges));
 l=edges(1:end-1);
@@ -42,11 +43,11 @@ specoption=optimset('Algorithm','interior-point','MaxIter',10000,'MaxFunEvals',1
 %%%approximate estimations of Gamma distribution on Wikipedia
 % s=log(meanx)-meanlnx;
 % a0=(3-s+sqrt(24*s+(s-3)^2))/(12*s);
-b0=meanx/a0;
-lam0=1;
+% b0=meanx/a0;
+lam0=1-a0;
 % [param nLL]= fminsearch(@negloglike, [a0 b0 lam0]);
 % param= mle(x,'logpdf',@logpdf,'logsf',@logsf,'start',[a0 b0 lam0],'optimfun','fmincon','options', otheroptions2);
-param=fmincon(@logpdf,[a0 b0 lam0],[],[],[],[],[a0-0.5*a0 0 0],[a0+0.5*a0 Inf Inf],[],specoption);
+param=fmincon(@logpdf,[a0 b0 lam0],[],[],[],[],[a0-0.5*a0 b0-0.1*b0 0],[a0+0.5*a0 b0+0.5*b0 5],[],specoption);
 alph=param(1); bet=param(2); lamd=param(3);
 % totLL=-numel(x)*nLL;
 totLL=logpdf(param);
