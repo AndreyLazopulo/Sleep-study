@@ -116,7 +116,7 @@ if plotting == 1
 %     loglog((uniques),(numUnique)/(sum(numUnique.*[diff(uniques); 0])),'ro',(uniques),...
 %         exp(pdfit),'b')
     title('4 expo mle')
-%     edges=[log(unique(distributdata));[max(log(unique(distributdata)))+0.1:0.1:10]'];
+%     edges=[(log(min(distributdata))-mod(log(min(distributdata)),0.2)):0.2:10]';
 %     for jjj=1:k
 %         lamda=plambda(k+jjj);
 %         norm2=exp(-lamda*xmin)-exp(-lamda*xmax);

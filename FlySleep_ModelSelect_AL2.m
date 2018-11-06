@@ -57,7 +57,7 @@ storecell(1,:)={'Model','Params','LL'...
 mm=1; %model counter
 
 
-%%3rd model: estimate parameters using the log-normal distr
+%% %%%%%%%%%%%%%LOG_NORMAL DISTRIBUTION%%%%%%%%%%
 mm=mm+1;
 try
     [mu,  sigma,  AIC_logno, ~, pval, LL]=Binned_LogNorm(distributdata,plotting,binway); % changed to my function
@@ -84,7 +84,7 @@ disp(' ')
 storecell(mm,1:4)={'Log-Norm', [mu, sigma], LL, AIC_logno};
 storecell(mm,7)={pval};
 % 
-% %6th model: truncated power-law
+%% %%%%%%%%%%TRUNCATED POWER LAW%%%%%%%%%%%%
 mm=mm+1;
 try
     [Alpha, AIC_tpl , ~, pval, LL] = Binned_TruncPL(distributdata,plotting,binway);
@@ -103,7 +103,7 @@ disp(' ')
 storecell(mm,1:4)={'PowerLaw_bound', Alpha, LL, AIC_tpl};
 storecell(mm,7)={pval};
 % 
-% % %%%%the general Weibull distribution
+%% %%%%%GENERALIZED WEIBULL DISTRIBUTION%%%%%%%%%%%%
 mm=mm+1;
 try
     [alph, bet, lamd, AIC_gWei, pval, LL] = Binned_genWeibull(distributdata,plotting,binway); % changed to my function
@@ -123,26 +123,7 @@ disp(' ')
 storecell(mm,1:4)={'genWeibull', [alph, bet, lamd], LL, AIC_gWei};
 storecell(mm,7)={pval};
 
-%%7th model: power-law with exponential truncation
-mm=mm+1;
-try
-    [Aplambda_1, AIC_plexpo, ~, pval, LL] = Binned_PL1Expo(distributdata,plotting,binway);
-catch
-    AIC_plexpo=NaN;
-    pval=NaN;
-    LL=nan(size(LL));
-    Aplambda_1=NaN(1,2);
-end
-disp('Power-law with Expo cutoff fit results: ')
-fprintf('alpha=%g\n',Aplambda_1(1))
-fprintf('lamda=%g\n',Aplambda_1(2))
-%fprintf('The p-value for truncated power-law fit is %g\n',pval)
-fprintf('AIC=%g\n',AIC_plexpo)
-fprintf('Gtest p-value=%g\n',pval)
-disp(' ')
-storecell(mm,1:4)={'PLExpoCutff', Aplambda_1, LL, AIC_plexpo};
-storecell(mm,7)={pval};
-
+%% %%%%*****STARTING THE MULTIEXPONENTIAL SERIES*****
 %%2nd model: estimate parameters using the bounded exponential distr
 mm=mm+1;
 try
@@ -254,27 +235,46 @@ storecell(mm,1:4)={'5Exponential', plambda_5, LL, AIC_5Expo};
 storecell(mm,7)={pval};
 
 %5th model: estimate parameters using a 6 exponential distrib mm=mm+1;
-disp('Running model: 6 Exponentials')
-disp(' ')
+% disp('Running model: 6 Exponentials')
+% disp(' ')
+% mm=mm+1;
+% try
+%     [plambda_6, AIC_6Expo , ~, pval, LL] =Binned_6Expo_mle(distributdata,plotting,binway);
+% catch
+%     plambda_6=NaN(1,12);
+%     AIC_6Expo=NaN;
+%     pval=NaN;
+%     LL=zeros(size(LL));
+% end
+%  disp('6 Exponential fit results: ')
+% fprintf('w =%g,%g,%g,%g,%g %g\n',plambda_6(1:6))
+% fprintf('lambda=%g,%g,%g,%g,%g,%g\n',plambda_6(7:12))
+% fprintf('AIC=%g\n',AIC_6Expo) 
+% fprintf('Gtest p-value=%g\n',pval)
+% disp(' ')
+% storecell(mm,1:4)={'6Exponential', plambda_6, LL, AIC_6Expo};
+% storecell(mm,7)={pval};
+
+%% %%%%*****STARTING THE POWER-LAW WITH SUM OF EXPONENTIAL SERIES*****
+
 mm=mm+1;
 try
-    [plambda_6, AIC_6Expo , ~, pval, LL] =Binned_6Expo_mle(distributdata,plotting,binway);
+    [Aplambda_1, AIC_plexpo, ~, pval, LL] = Binned_PL1Expo(distributdata,plotting,binway);
 catch
-    plambda_6=NaN(1,12);
-    AIC_6Expo=NaN;
+    AIC_plexpo=NaN;
     pval=NaN;
-    LL=zeros(size(LL));
+    LL=nan(size(LL));
+    Aplambda_1=NaN(1,2);
 end
- disp('6 Exponential fit results: ')
-fprintf('w =%g,%g,%g,%g,%g %g\n',plambda_6(1:6))
-fprintf('lambda=%g,%g,%g,%g,%g,%g\n',plambda_6(7:12))
-fprintf('AIC=%g\n',AIC_6Expo) 
+disp('Power-law with Expo cutoff fit results: ')
+fprintf('alpha=%g\n',Aplambda_1(1))
+fprintf('lamda=%g\n',Aplambda_1(2))
+%fprintf('The p-value for truncated power-law fit is %g\n',pval)
+fprintf('AIC=%g\n',AIC_plexpo)
 fprintf('Gtest p-value=%g\n',pval)
 disp(' ')
-storecell(mm,1:4)={'6Exponential', plambda_6, LL, AIC_6Expo};
+storecell(mm,1:4)={'PLExpoCutff', Aplambda_1, LL, AIC_plexpo};
 storecell(mm,7)={pval};
-
-%%%%*****STARTING THE POWER-LAW WITH SUM OF EXPONENTIAL SERIES*****
 
 mm=mm+1;
 disp('Running model:Power-law with 2 Exponentials')
@@ -376,7 +376,7 @@ storecell(mm,7)={pval};
 % storecell(mm,1:4)={'PL6Exponential', Aplambda_6, LL, AIC_Pl6Expo};
 % storecell(mm,7)={pval};
 
-% %%%%*****STARTING THE STREACHED EXPONENT WITH EXPONENTS SERIES *****
+%% %%%%*****STARTING THE STREACHED EXPONENT WITH EXPONENTS SERIES *****
 % 
 
 mm=mm+1;
@@ -500,7 +500,187 @@ storecell(mm,7)={pval};
 % storecell(mm,1:4)={'Str5Exponential', plambda_st5, LL, AIC_st5};
 % storecell(mm,7)={pval};
 % 
-% %%%%%%%*****************END OF MODEL TESTING************************
+
+%% %%%%*****STARTING THE GAUSSIAN WITH EXPONENTS SERIES *****
+% 
+mm=mm+1;
+disp('Running model: Gaus with 1 expo')
+disp(' ')
+try
+    [plambda_g1e, AIC_g1e , ~, pval, LL] = Gaus_1Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g1e=NaN(1,5);
+    AIC_g1e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gaus with 1 exponent results: ')
+fprintf('w =%g,%g\n',plambda_g1e(1:2))
+fprintf('mu =%g\n',plambda_g1e(3))
+fprintf('sig =%g\n',plambda_g1e(4))
+fprintf('lambda=%g\n',plambda_g1e(5))
+fprintf('AIC=%g\n',AIC_g1e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gaus1Exponential', plambda_g1e, LL, AIC_g1e};
+storecell(mm,7)={pval};
+
+mm=mm+1;
+disp('Running model: Gaus with 2 expo')
+disp(' ')
+try
+    [plambda_g2e, AIC_g2e , ~, pval, LL] = Gaus_2Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g2e=NaN(1,7);
+    AIC_g2e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gaus with 2 exponent results: ')
+fprintf('w =%g,%g,%g\n',plambda_g2e(1:3))
+fprintf('mu =%g\n',plambda_g2e(4))
+fprintf('sig =%g\n',plambda_g2e(5))
+fprintf('lambda=%g,%g\n',plambda_g2e(6:7))
+fprintf('AIC=%g\n',AIC_g2e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gaus2Exponential', plambda_g2e, LL, AIC_g2e};
+storecell(mm,7)={pval};
+
+mm=mm+1;
+disp('Running model: Gaus with 3 expo')
+disp(' ')
+try
+    [plambda_g3e, AIC_g3e , ~, pval, LL] = Gaus_3Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g3e=NaN(1,9);
+    AIC_g3e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gaus with 3 exponent results: ')
+fprintf('w =%g,%g,%g,%g\n',plambda_g3e(1:4))
+fprintf('mu =%g\n',plambda_g3e(5))
+fprintf('sig =%g\n',plambda_g3e(6))
+fprintf('lambda=%g,%g,%g\n',plambda_g3e(7:9))
+fprintf('AIC=%g\n',AIC_g3e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gaus3Exponential', plambda_g3e, LL, AIC_g3e};
+storecell(mm,7)={pval};
+
+mm=mm+1;
+disp('Running model: Gaus with 4 expo')
+disp(' ')
+try
+    [plambda_g4e, AIC_g4e , ~, pval, LL] = Gaus_4Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g4e=NaN(1,11);
+    AIC_g4e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gaus with 4 exponent results: ')
+fprintf('w =%g,%g,%g,%g,%g\n',plambda_g4e(1:5))
+fprintf('mu =%g\n',plambda_g4e(6))
+fprintf('sig =%g\n',plambda_g4e(7))
+fprintf('lambda=%g,%g,%g,%g\n',plambda_g4e(8:11))
+fprintf('AIC=%g\n',AIC_g4e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gaus4Exponential', plambda_g4e, LL, AIC_g4e};
+storecell(mm,7)={pval};
+
+%% %%%%*****STARTING THE GAMMA WITH EXPONENTS SERIES *****
+% 
+mm=mm+1;
+disp('Running model: Gamma with 1 expo')
+disp(' ')
+try
+    [plambda_g1e, AIC_g1e , ~, pval, LL] = Gamma_1Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g1e=NaN(1,5);
+    AIC_g1e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gamma with 1 exponent results: ')
+fprintf('w =%g,%g\n',plambda_g1e(1:2))
+fprintf('alpha =%g\n',plambda_g1e(3))
+fprintf('lamGamma =%g\n',plambda_g1e(4))
+fprintf('lambda=%g\n',plambda_g1e(5))
+fprintf('AIC=%g\n',AIC_g1e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gamma1Exponential', plambda_g1e, LL, AIC_g1e};
+storecell(mm,7)={pval};
+
+mm=mm+1;
+disp('Running model: Gamma with 2 expo')
+disp(' ')
+try
+    [plambda_g2e, AIC_g2e , ~, pval, LL] = Gamma_2Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g2e=NaN(1,7);
+    AIC_g2e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gamma with 2 exponent results: ')
+fprintf('w =%g,%g,%g\n',plambda_g2e(1:3))
+fprintf('alpha =%g\n',plambda_g2e(4))
+fprintf('lamGamma =%g\n',plambda_g2e(5))
+fprintf('lambda=%g,%g\n',plambda_g2e(6:7))
+fprintf('AIC=%g\n',AIC_g2e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gamma2Exponential', plambda_g2e, LL, AIC_g2e};
+storecell(mm,7)={pval};
+
+mm=mm+1;
+disp('Running model: Gamma with 3 expo')
+disp(' ')
+try
+    [plambda_g3e, AIC_g3e , ~, pval, LL] = Gamma_3Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g3e=NaN(1,9);
+    AIC_g3e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gamma with 3 exponent results: ')
+fprintf('w =%g,%g,%g,%g\n',plambda_g3e(1:4))
+fprintf('alpha =%g\n',plambda_g3e(5))
+fprintf('lamGamma =%g\n',plambda_g3e(6))
+fprintf('lambda=%g,%g,%g\n',plambda_g3e(7:9))
+fprintf('AIC=%g\n',AIC_g3e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gamma3Exponential', plambda_g3e, LL, AIC_g3e};
+storecell(mm,7)={pval};
+
+mm=mm+1;
+disp('Running model: Gamma with 4 expo')
+disp(' ')
+try
+    [plambda_g4e, AIC_g4e , ~, pval, LL] = Gamma_4Expo_mle(distributdata,plotting,binway);
+catch
+    plambda_g4e=NaN(1,11);
+    AIC_g4e=NaN;
+    pval=NaN;
+    LL=zeros(size(LL));
+end
+disp('Gamma with 4 exponent results: ')
+fprintf('w =%g,%g,%g,%g,%g\n',plambda_g4e(1:5))
+fprintf('alpha =%g\n',plambda_g4e(6))
+fprintf('lamGamma =%g\n',plambda_g4e(7))
+fprintf('lambda=%g,%g,%g,%g\n',plambda_g4e(8:11))
+fprintf('AIC=%g\n',AIC_g4e)
+fprintf('Gtest p-value=%g\n',pval)
+disp(' ')
+storecell(mm,1:4)={'Gamma4Exponential', plambda_g4e, LL, AIC_g4e};
+storecell(mm,7)={pval};
+%% %%%%%%%*****************END OF MODEL TESTING************************
 % %%%%%%%*****************END OF MODEL TESTING************************
 % %%%%%%%*****************END OF MODEL TESTING************************
 % 
@@ -559,6 +739,7 @@ n_params=numel(storecell{2,2});
 str=char(storecell(2,1));
 if strncmp(str(2:end), 'Exponential', 10),n_params=n_params-1;end;
 if strncmp(str(4:end), 'Exponential', 10),n_params=n_params-1;end;
+if strncmp(str(6:end), 'Exponential', 10),n_params=n_params-1;end;
 if strncmp(str(7:end), 'Exponential', 10),n_params=n_params-1;end;
 [gof pval] = Gtest(Obs,Expect,n_params); %do the G-test
 
@@ -569,6 +750,7 @@ if c_hat > 1
         if strncmp(str(2:end), 'Exponential', 10),n_params=n_params-1;end;
         if strncmp(str(4:end), 'Exponential', 10),n_params=n_params-1;end;
         if strncmp(str(5:end), 'Exponential', 10),n_params=n_params-1;end;
+        if strncmp(str(6:end), 'Exponential', 10),n_params=n_params-1;end;
         QAIC(qqq-1)=2*sum(storecell{qqq,3})/c_hat+2*n_params*numel(distributdata)/(numel(distributdata)-n_params-1);
     end
     storecell(2:end,4)=num2cell(AkaikeW(QAIC));

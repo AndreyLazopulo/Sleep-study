@@ -52,8 +52,8 @@ Allstartvals(:,k+1:end)=log(Allstartvals(:,k+1:end));
 
 
 specoption=optimset('Algorithm','interior-point','MaxIter',10000,'MaxFunEvals',10000,'TolX',10^-6,'TolFun',10^-8,'Display','off','FinDiffType','central');
-lowerbound=[0 log(minlambda)];
-upperbound=[3 log(maxlambda)];
+lowerbound=[-10 log(minlambda)];
+upperbound=[10 log(maxlambda)];
 oparm=NaN(50,2*k); totLL=NaN(50,1);
 
 parfor gg=1:min(50,size(Allstartvals,1))

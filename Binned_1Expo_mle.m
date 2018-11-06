@@ -100,7 +100,7 @@ if plotting == 1
 
 %     loglog((uniques),(numUnique)/(sum(numUnique.*[diff(uniques); 0])),'ro',(uniques),...
 %         exp(pdfit),'b')
-%     title('Bound Exp')
+     title('Bound Exp')
 %     edges=[log(unique(distributdata));[max(log(unique(distributdata)))+0.1:0.1:10]'];
 %     figure;
 %     histogram(log(distributdata),edges,'Normalization','probability');

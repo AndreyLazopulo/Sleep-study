@@ -21,20 +21,20 @@ unqx=xvals;
 % xvals=distr(:,1);yvals=1-distr(:,2);
 
 %%calculate the correct cumulative distr function
-switch model,
-    case 'Exponential',
+switch model
+    case 'Exponential'
         cdfvals = myExpoCdf(xvals,params(1),xmin);
-    case 'Expo_bound',
+    case 'Expo_bound'
         cdfvals = myBoundExpCDF(xvals,params(1),xmin,xmax);
-    case '2Exponential',
+    case '2Exponential'
         cdfvals = myHyperExpoCdf(xvals,params,xmin,xmax,2);
-    case '3Exponential',
+    case '3Exponential'
         cdfvals = myHyperExpoCdf(xvals,params,xmin,xmax,3);
-    case '4Exponential',
+    case '4Exponential'
         cdfvals = myHyperExpoCdf(xvals,params,xmin,xmax,4);
-    case '5Exponential',
+    case '5Exponential'
         cdfvals = myHyperExpoCdf(xvals,params,xmin,xmax,5);
-    case '6Exponential',
+    case '6Exponential'
         cdfvals = myHyperExpoCdf(xvals,params,xmin,xmax,6);
     case 'PL2Exponential'
         cdfvals = myPLwithExpoCdf(xvals,params,xmin,xmax,2);
@@ -54,6 +54,14 @@ switch model,
         cdfvals = myGausExpoCdf(xvals,params,xmin,xmax,4);
     case 'Gaus4Exponential'
         cdfvals = myGausExpoCdf(xvals,params,xmin,xmax,5);
+    case 'Gamma1Exponential'
+        cdfvals = myGammaExpoCdf(xvals,params,xmin,xmax,2);
+    case 'Gamma2Exponential'
+        cdfvals = myGammaExpoCdf(xvals,params,xmin,xmax,3);
+    case 'Gamma3Exponential'
+        cdfvals = myGammaExpoCdf(xvals,params,xmin,xmax,4);
+    case 'Gamma4Exponential'
+        cdfvals = myGammaExpoCdf(xvals,params,xmin,xmax,5);
     case 'StrExpo'
         cdfvals = myStrExpoCdf(xvals,params,xmin,xmax,1);
     case 'Str1Exponential'

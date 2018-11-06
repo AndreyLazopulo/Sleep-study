@@ -52,7 +52,7 @@ Allstartvals(:,k+1:end)=log(Allstartvals(:,k+1:end));
 
 
 specoption=optimset('Algorithm','interior-point','MaxIter',10000,'MaxFunEvals',10000,'TolX',10^-6,'TolFun',10^-8,'Display','off','FinDiffType','central');
-lowerbound=[0 miny log(minlambda) log(minlambda)];
+lowerbound=[-3 miny log(minlambda) log(minlambda)];
 upperbound=[3 maxy log(maxlambda) log(maxlambda)];
 oparm=NaN(50,2*k); totLL=NaN(50,1);
 

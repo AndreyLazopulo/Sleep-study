@@ -67,8 +67,8 @@ startpoint(:,k+2:end)=log(startpoint(:,k+2:end));
 
 
 specoption=optimset('Algorithm','interior-point','MaxIter',10000,'MaxFunEvals',10000,'TolX',10^-6,'TolFun',10^-8,'Display','off','FinDiffType','central');
-lowerbound=[miny miny miny 0 1 log(minlambda) log(minlambda) log(minlambda)];
-upperbound=[maxy maxy maxy Inf Inf log(maxlambda) log(maxlambda) log(maxlambda)];
+lowerbound=[miny miny miny min(distributdata) 1 log(minlambda) log(minlambda) log(minlambda)];
+upperbound=[maxy maxy maxy max(distributdata) sqrt(var(distributdata)) log(maxlambda) log(maxlambda) log(maxlambda)];
 oparm=NaN(70,2*k); totLL=NaN(70,1);
 
 parfor gg=1:min([70,size(startpoint,1)])

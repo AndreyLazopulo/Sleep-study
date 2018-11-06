@@ -23,10 +23,10 @@ switch bintype
         binbound=[0:0.2:10]';
 end
 %initial guess for alpha
-[Y,E]=histcounts(X,min(X):1/3:max(X)+1/3);
-f=fit(log(E(1:4)'),log(Y(1:4)'),'poly1');
-CC=coeffvalues(f);
-alpha0=-CC(1);
+% [Y,E]=histcounts(X,min(X):1/3:max(X)+1/3);
+% f=fit(log(E(1:4)'),log(Y(1:4)'),'poly1');
+% CC=coeffvalues(f);
+alpha0=-5;%CC(1);
 
 [fitY,edges]=histcounts(log(X),binbound);
 fitY=fitY./length(X);
