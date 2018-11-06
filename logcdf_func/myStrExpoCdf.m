@@ -1,0 +1,40 @@
+function [cdfvals] = myStrExpoCdf(data,params,xmin,xmax,K)
+%%Cumulative distribution function of a composite Brownian walk model made
+%%up of K exponential terms. Assumes the model cdf is written as
+%% cdf=1-sum(p_i*exp(-lambda_i*(x-xmin)))  for i=1 to K. Notice all p_i's 
+%%lambda_i's are positive in this expression.
+
+cdfvals=[];
+if isempty(xmin)|| xmin<0, xmin=min(data(data>=0)); end
+if isempty(xmax), xmax=max(data(data>=0)); end
+
+data(data<xmin|data>xmax)=[];   %%exclude data that are outside range
+% params(params(1:K)<0)=[]; %%exclude normalization constants that are negative 
+if K==1
+    params=[params(1),1,params(2)];
+end
+
+if numel(params)~=2*K+1
+    disp('myStrExpoCdf:Expected number of parameters not supplied') 
+    disp('Parameters must be zero or positive')
+    return
+end
+
+z=data-xmin; 
+zmax=xmax-xmin;
+a=params(1);
+p=params(2:K+1);
+lam=params(K+2:end);
+
+cdfvals=p(1)*(gamma_incomplete(lam(1)*xmin^a,1/a)-gamma_incomplete(lam(1)*data.^a,1/a))./(gamma_incomplete(lam(1)*xmin^a,1/a)-gamma_incomplete(lam(1)*xmax^a,1/a));
+cdfvals=cdfvals';
+% cdfvals=p(1)*(exp(-lam(1)*z)-1);  %%initialize with first term
+% cdfvals=cdfvals./(exp(-lam(1)*zmax)-1);
+for ii=1:K-1
+    const=exp(-lam(ii+1)*zmax)-1;
+    newterm=p(ii+1)*(exp(-lam(ii+1)*z)-1)./const;
+    cdfvals=cdfvals+newterm;
+end
+    
+end
+
